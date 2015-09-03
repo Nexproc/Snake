@@ -2,6 +2,8 @@ html {
   background: url("./table.jpg");
   background-position: center;
   overflow: hidden;
+  clear: both;
+  height: 1000px;
 }
 
 ul {
@@ -28,9 +30,8 @@ body {
   background-position: center top;
   background-repeat: no-repeat;
   background-origin: border-box;
-  color: white;
   text-align: center;
-  height: 100%;
+  height: 1000%;
 }
 
 div {
