@@ -37,3 +37,4 @@ The game itself consists of a few separate classes:
 - `Coord`: Simply stores the current position of a cell and compares it to other coordinate arrays.
 - `Snake`: Consists of an `array` of `coordinate`s and has a given direction, the snake is completely repsonsible for moving itself.  The movement is achieved by appending a new coord to the beginning of the array and removing the last coord from the end.
 - `Board`: Consists of 20 `array`s (rows), each of which is composed of 20 `char`s to represent the current state of the given cell. These states are exactly the same as the `class`es of the `div`s on the front end and are used to define the new classes for those `div`s.
+- `View`: Acts as the link between the back end and the front end.  The `View` parses the output from the `Board#render()`, removes the current classes from each `div`, and then adds the new class based on the value within the cell at that position.
