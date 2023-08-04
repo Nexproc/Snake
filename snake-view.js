@@ -15,7 +15,8 @@
     this.buildListener.call(this);
     var view = this;
     this.nextDir = null;
-    this.interval = setInterval(this.step.bind(view), 50);
+    // tweak this to change game speed
+    this.interval = setInterval(this.step.bind(view), 100);
   };
 
   View.prototype.scaffold = function () {
@@ -79,8 +80,7 @@
     if (this.board.lost) {
       $('body').off("keydown");
       $('body').on("keydown", this.reset.bind(this));
-    }
-    else {
+    } else {
       this.board.snake.move();
     }
     this.render();
