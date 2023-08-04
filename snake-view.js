@@ -15,6 +15,8 @@
     this.buildListener.call(this);
     var view = this;
     this.nextDir = null;
+    // move queue stuff
+    this.queuedDir = null;
     // tweak this to change game speed
     this.interval = setInterval(this.step.bind(view), 100);
   };
@@ -47,25 +49,36 @@
   View.prototype.handleKeyEvent = function (event) {
     var dir = this.board.snake.dir;
     console.log();
-    switch (event.keyCode) {
-        case 37:
-        case 65:
-          if (dir !== "E") { this.nextDir = "W"; }
-          break;
-        case 38:
-        case 87:
-          if (dir !== "S") { this.nextDir = "N"; }
-          break;
-        case 39:
-        case 68:
-          if (dir !== "W") { this.nextDir = "E"; }
-          break;
-        case 40:
-        case 83:
-          if (dir !== "N") { this.nextDir = "S"; }
-          break;
+    if (this.nextDir == null) {
+      this.nextDir = chooseDir(event, dir, this.nextDir);
+      // if we set a nextDir, the queue is invalid
+      this.queuedDir = null;
+    } else {
+      this.queuedDir = chooseDir(event, this.nextDir, this.queuedDir);
     }
   };
+
+  function chooseDir(event, moving, oldDir) {
+    switch (event.keyCode) {
+      case 37:
+      case 65:
+        if (moving !== "E") return "W";
+        break;
+      case 38:
+      case 87:
+        if (moving !== "S") return "N";
+        break;
+      case 39:
+      case 68:
+        if (moving !== "W") return "E";
+        break;
+      case 40:
+      case 83:
+        if (moving !== "N") return "S";
+        break;
+    }
+    return oldDir;
+  }
 
   View.prototype.reset = function (event) {
     clearInterval(this.interval);
@@ -75,8 +88,14 @@
   };
 
   View.prototype.step = function () {
-    if (this.nextDir) this.board.snake.turn(this.nextDir);
-    this.nextDir = null;
+    if (this.nextDir) {
+      this.board.snake.turn(this.nextDir);
+      this.nextDir = null;
+    } else if (this.queuedDir) {
+      this.board.snake.turn(this.queuedDir);
+      this.queuedDir = null;
+    }
+
     if (this.board.lost) {
       $('body').off("keydown");
       $('body').on("keydown", this.reset.bind(this));
